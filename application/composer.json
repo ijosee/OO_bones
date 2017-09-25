@@ -1,0 +1,11 @@
+{
+	"version" : "1.0.7",
+	"type" : "library",
+	"keywords" : [
+		"mailchimp",
+		"mail"
+	],
+	"require" : {
+		"drewm/mailchimp-api" : "^2.4"
+	}
+}
