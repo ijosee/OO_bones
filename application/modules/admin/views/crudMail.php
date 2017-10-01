@@ -20,7 +20,7 @@
 				<i class="fa fa-times-circle-o"></i>
 				La clave no es válida
 			</label>
-			<input type="text" class="form-control" id="inputCheckApiKeyMailChimp" placeholder="56ec508114429503a18b2b2ca81cc7ca-us16" value="56ec508114429503a18b2b2ca81cc7ca-us16">
+			<input type="text" class="form-control" id="inputCheckApiKeyMailChimp" placeholder="" value="56ec508114429503a18b2b2ca81cc7ca-us16">
 			<!-- 				<span class="help-block">El campo esta vacio o no tiene el formato correcto</span> -->
 		</div>
 		<div class="form-group col-xs-12 has-errors" style="padding: 0px !important;">
