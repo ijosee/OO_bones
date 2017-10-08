@@ -1,6 +1,6 @@
 <!-- Custom load resources -->
 <script src="<?php echo base_url('assets/dist/admin/full_calendar.js');?>"></script>
-<script src="<?php echo base_url('assets/dist/admin/fullcalendar/fullcalendar.min.js');?>"></script>
+<script src="<?php echo base_url('assets/dist/admin/fullcalendar/fullcalendar.js');?>"></script>
 <script src="<?php echo base_url('assets/dist/admin/fullcalendar/locale/es.js');?>"></script>
 <script>
 $(document).ready(function(){

@@ -1,160 +1,413 @@
-$(document).ready(function(){
+$(document).ready(function() {
 
-    /* initialize the external events
-     -----------------------------------------------------------------*/
-    function init_events(ele) {
-      ele.each(function () {
+	/*
+	 * initialize the external events
+	 * -----------------------------------------------------------------
+	 */
+	function init_events(ele) {
+		ele.each(function() {
 
-        // create an Event Object (http://arshaw.com/fullcalendar/docs/event_data/Event_Object/)
-        // it doesn't need to have a start or end
-        var eventObject = {
-          title: $.trim($(this).text()) // use the element's text as the event title
-        }
+			// create an Event Object
+			// (http://arshaw.com/fullcalendar/docs/event_data/Event_Object/)
+			// it doesn't need to have a start or end
+			var eventObject = {
+				title : $.trim($(this).text())
+			// use the element's text as the event title
+			}
 
-        // store the Event Object in the DOM element so we can get to it later
-        $(this).data('eventObject', eventObject)
+			// store the Event Object in the DOM element so we can get to it
+			// later
+			$(this).data('eventObject', eventObject)
 
-        // make the event draggable using jQuery UI
-        $(this).draggable({
-          zIndex        : 1070,
-          revert        : true, // will cause the event to go back to its
-          revertDuration: 0  //  original position after the drag
-        })
+			// make the event draggable using jQuery UI
+			$(this).draggable({
+				zIndex : 1070,
+				revert : true, // will cause the event to go back to its
+				revertDuration : 0
+			// original position after the drag
+			})
 
-      })
-    }
+		})
+	}
 
-    init_events($('#external-events div.external-event'))
+	init_events($('#external-events div.external-event'))
 
-    /* initialize the calendar
-     -----------------------------------------------------------------*/
-    //Date for the calendar events (dummy data)
-    var date = new Date()
-    var d    = date.getDate(),
-        m    = date.getMonth(),
-        y    = date.getFullYear()
-        
-    $('#calendar').fullCalendar({
-      header    : {
-        left  : 'prev,next today',
-        center: 'title',
-        right : 'month,agendaWeek,agendaDay'
-      },
-      buttonText: {
-        today: 'hoy',
-        month: 'mes',
-        week : 'semana',
-        day  : 'dia'
-      },
-      //Random default events
-      events    : [
-        {
-          title          : 'Evento de todo el dia',
-          start          : new Date(y, m, 1),
-          backgroundColor: '#f56954', //red
-          borderColor    : '#f56954' //red
-        },
-        {
-          title          : 'Evento largi',
-          start          : new Date(y, m, d - 5),
-          end            : new Date(y, m, d - 2),
-          backgroundColor: '#f39c12', //yellow
-          borderColor    : '#f39c12' //yellow
-        },
-        {
-          title          : 'Reunión',
-          start          : new Date(y, m, d, 10, 30),
-          allDay         : false,
-          backgroundColor: '#0073b7', //Blue
-          borderColor    : '#0073b7' //Blue
-        },
-        {
-          title          : 'Peinar + cortar + tinte',
-          start          : new Date(y, m, d, 12, 0),
-          end            : new Date(y, m, d, 14, 0),
-          allDay         : false,
-          backgroundColor: '#00c0ef', //Info (aqua)
-          borderColor    : '#00c0ef' //Info (aqua)
-        },
-        {
-          title          : 'Corte caballero',
-          start          : new Date(y, m, d + 1, 19, 0),
-          end            : new Date(y, m, d + 1, 22, 30),
-          allDay         : false,
-          backgroundColor: '#00a65a', //Success (green)
-          borderColor    : '#00a65a' //Success (green)
-        },
-        {
-          title          : 'Click origen organico',
-          start          : new Date(y, m, 28),
-          end            : new Date(y, m, 29),
-          url            : 'http://origenorganic.com/',
-          backgroundColor: '#3c8dbc', //Primary (light-blue)
-          borderColor    : '#3c8dbc' //Primary (light-blue)
-        }
-      ],
-      editable  : true,
-      droppable : true, // this allows things to be dropped onto the calendar !!!
-      drop      : function (date, allDay) { // this function is called when something is dropped
+	initCalendar();
 
-        // retrieve the dropped element's stored Event Object
-        var originalEventObject = $(this).data('eventObject')
+	/* ADDING EVENTS */
+	var currColor = '#1c0dbc' // Red by default
+	// Color chooser button
+	var colorChooser = $('#color-chooser-btn')
+	
+	$(document).on("click", ".deleteEvenButton", function() {
+		$(this).parent().parent().css('display','none');
+		deleteCita($(this).attr("data-id"));
+	});
+	
+	$(document).on("click", ".popover-title", function(){
+		
+		  var h3 = $(this)
+		  var input = $('<input>').val(h3.text())
 
-        // we need to copy it, so that multiple events don't have a reference to the same object
-        var copiedEventObject = $.extend({}, originalEventObject)
+		  h3.after(input)
+		  h3.hide()
 
-        // assign it the date that was reported
-        copiedEventObject.start           = date
-        copiedEventObject.allDay          = allDay
-        copiedEventObject.backgroundColor = $(this).css('background-color')
-        copiedEventObject.borderColor     = $(this).css('border-color')
+		  input.on('blur', function(){
+			  
+		      h3.text(input.val());
+		      h3.show();
+		      input.hide();
+		     
+		  })
+		  
+		  updateCita
+		  
+	});
+	
+	$('#color-chooser > li > a').click(function(e) {
+		e.preventDefault()
+		// Save color
+		currColor = $(this).css('color')
+		// Add color effect to button
+		$('#add-new-event').css({
+			'background-color' : currColor,
+			'border-color' : currColor
+		})
+	})
+	
+	$('#add-new-event').click(function(e) {
+		
+		e.preventDefault()
+		
+		// Get value and make sure it is not null
+		var val = $('#new-event').val()
+		if (val.length == 0) {
+			return
+		}
 
-        // render the event on the calendar
-        // the last `true` argument determines if the event "sticks" (http://arshaw.com/fullcalendar/docs/event_rendering/renderEvent/)
-        $('#calendar').fullCalendar('renderEvent', copiedEventObject, true)
+		// Create events
+		var event = $('<div />')
+		event.css({
+			'background-color' : currColor,
+			'border-color' : currColor,
+			'color' : '#fff'
+		}).addClass('external-event')
+		
+		event.html(val)
+		
+		$('#external-events').prepend(event)
 
-        // is the "remove after drop" checkbox checked?
-        if ($('#drop-remove').is(':checked')) {
-          // if so, remove the element from the "Draggable Events" list
-          $(this).remove()
-        }
+		// Add draggable funtionality
+		init_events(event)
 
-      }
-    })
+		// Remove event from text input
+		$('#new-event').val('')
+		
+	})
+})
 
-    /* ADDING EVENTS */
-    var currColor = '#3c8dbc' //Red by default
-    //Color chooser button
-    var colorChooser = $('#color-chooser-btn')
-    $('#color-chooser > li > a').click(function (e) {
-      e.preventDefault()
-      //Save color
-      currColor = $(this).css('color')
-      //Add color effect to button
-      $('#add-new-event').css({ 'background-color': currColor, 'border-color': currColor })
-    })
-    $('#add-new-event').click(function (e) {
-      e.preventDefault()
-      //Get value and make sure it is not null
-      var val = $('#new-event').val()
-      if (val.length == 0) {
-        return
-      }
+function initCalendar() {
+	
+	$.ajax({
+		type : 'POST',
+		url : '/OO_bones/admin/calendar/initCalendar',
+		dataType : 'json',
+		beforeSend: function(){
+			// $('#box_body_mailchimp').append("<div class='overlay'><i
+			// class='fa fa-refresh fa-spin'></i></div>");
+		},
+		success : function(result) {
+			
+			if(typeof(result.status) !== 'undefined' && result.status == 400){
+				alert('No se ha podido inicializar el calendario : '+result.detail);
+			}
+			
+ 			var event_item = [];
+ 			
+ 			
+			$(result).each(function(index,element){
+				
+				var event = {};
+				
+				event.title = element.value;
+				event.start = element.date_in;
+				event.end = element.date_out;
+				event.allDay = false;
+				event.backgroundColor = element.backgroundColor;
+				event.borderColor = element.borderColor;
+				event.id = element.id ;
+				
+				event_item.push(event);
+				
+			});
+			
+			$('#calendar').fullCalendar({
+				header : {
+					left : 'prev,next today',
+					center : 'title',
+					right : 'month,agendaWeek,agendaDay'
+				},
+				buttonText : {
+					today : 'hoy',
+					month : 'mes',
+					week : 'semana',
+					day : 'dia'
+				},
 
-      //Create events
-      var event = $('<div />')
-      event.css({
-        'background-color': currColor,
-        'border-color'    : currColor,
-        'color'           : '#fff'
-      }).addClass('external-event')
-      event.html(val)
-      $('#external-events').prepend(event)
+				// Random default events
+				events : event_item,
+				defaultView : 'agendaWeek',
+				editable : true,
+				droppable : true, 
+				loading: function (bool) {
+				       //alert('events are being rendered'); // Add your script
+															// to show loading
+				    },
+			    eventAfterAllRender: function (view) {
+				        //alert('all events are rendered'); // remove your
+															// loading
+				    },
+				drop : function(date, allDay ) { // this function is called
+													// when
 
-      //Add draggable funtionality
-      init_events(event)
+					// retrieve the dropped element's stored Event Object
+					var eventObject = {} ;
+					
+					eventObject.event_id = this.id
+					eventObject.event_title =  $(this).data('eventObject').title 
+					eventObject.event_start_time = date.format()
+					var defaultDuration = moment.duration($('#calendar').fullCalendar('option', 'defaultTimedEventDuration')); 
+				    var time_end = date.clone().add(defaultDuration)
+				    eventObject.event_end_time =  time_end.format()
+					eventObject.event_backgroundColor = $(this).css('background-color')
+					eventObject.event_borderColor = $(this).css('border-color')
 
-      //Remove event from text input
-      $('#new-event').val('')
-    })
-  })
+					// is the "remove after drop" checkbox checked?
+					if ($('#drop-remove').is(':checked')) {
+						// if so, remove the element from the "Draggable Events"
+						// list
+						$(this).remove()
+					}
+				    
+					saveCita(eventObject);
+
+// //Call when you drop any red/green/blue class to the week table.....first
+// time runs only.....
+// console.log("dropped");
+// console.log(date.format());
+// console.log(this.id);
+// var defaultDuration = moment.duration($('#calendar').fullCalendar('option',
+// 'defaultTimedEventDuration'));
+// var end = date.clone().add(defaultDuration); // on drop we only have date
+// given to us
+// console.log('end is ' + end.format());
+
+//
+// // assign it the date that was reported
+// copiedEventObject.start = date
+// copiedEventObject.allDay = allDay
+// copiedEventObject.finish = originalEventObject.end._i
+					
+
+					// $('#calendar').fullCalendar('renderEvent',
+					// copiedEventObject, true)
+
+				},
+				eventClick: function(calEvent, jsEvent, view) {
+
+					// $(this).popover({html:true,title:event.title,placement:'top',container:'body'}).popover('show');
+// alert('Event: ' + calEvent.title);
+// alert('Coordinates: ' + jsEvent.pageX + ',' + jsEvent.pageY);
+// alert('View: ' + view.name);
+//
+// // change the border color just for fun
+					// var a = "";
+
+			    },
+			    eventDrop: function(event, delta, revertFunc, jsEvent, ui, view ) {
+			    	
+			    		// retrieve the dropped element's stored Event Object
+					var eventObject = {} ;
+					
+					eventObject.event_id = event.id
+					eventObject.event_title =  event.title 
+					eventObject.event_start_time = event.start.format()
+					var defaultDuration = moment.duration($('#calendar').fullCalendar('option', 'defaultTimedEventDuration')); 
+				    var time_end = event.end || event.start.clone().add(defaultDuration);
+					eventObject.event_end_time =  time_end.format()
+					eventObject.event_backgroundColor = $(this).css('background-color')
+					eventObject.event_borderColor = $(this).css('border-color')
+
+			    		updateCita(eventObject) ;
+			    	
+			    	
+// //inner column movement drop so get start and call the ajax function......
+// console.log(event.start.format());
+// console.log(event.id);
+// var defaultDuration = moment.duration($('#calendar').fullCalendar('option',
+// 'defaultTimedEventDuration')); // get the default and convert it to proper
+// type
+// var end = event.end || event.start.clone().add(defaultDuration); // If there
+// is no end, compute it
+// console.log('end is ' + end.format());
+
+	            // alert(event.title + " was dropped on " +
+				// event.start.format());
+	            
+		    		// getting time
+
+			    },
+			    eventResize: function(event, delta, revertFunc) {
+
+				    	var event_id = event.id;
+			    		var event_start_time = moment(event.start._i).format('YYYY-MM-DD hh:mm:ss');
+			    		var event_end_time = moment(event.end._i).format('YYYY-MM-DD hh:mm:ss');
+			    		
+			    		updateCita(event_id,event_start_time,event_end_time);
+			    },
+			    eventRender: function (event, element) {
+			    	
+			        element.popover({
+			        		html: true,
+			            title: event.title,
+			            trigger : 'click',
+			            placement : 'auto',
+			            content: 'Start: ' + moment(event.start._i).format('hh:mm:ss') + '<br> End: ' + moment(event.end._i).format('hh:mm:ss') + 
+			            '<br> <button type="button" data-id='+event.id+' class="btn btn-block btn-danger btn-xs deleteEvenButton">Eliminar</button>'
+			        });
+			        
+			       
+			    }
+			})
+			
+		},
+		error : function(result){
+			$('#main-box_body_mailchimp > .overlay').remove();
+			if(typeof(result.detail) === 'undefined')
+				console.log('There is an error making ajax call. Please check console log');
+			
+			console.log('Ajax call failed .Error result : '+result.detail);
+			
+		},
+		complete: function(result){
+			// $('#box_body_mailchimp > .overlay').remove();
+		}
+	});
+	
+}
+	
+function updateCita(eventObject){
+	
+	$.ajax({
+		
+		type : 'POST',
+		url : '/OO_bones/admin/calendar/updateCitaDrag',
+		data: { eventId : eventObject.event_id, eventStart : eventObject.event_start_time , eventEnd : eventObject.event_end_time  },
+		dataType : 'text',
+		beforeSend: function(){
+			
+		},
+		success : function(result) {
+			
+			if(result !== null &&typeof(result.status) !== 'undefined' && result.status == 400){
+				alert('No se ha podido actualizar la cita : '+result.detail);
+			}
+			
+			// alert('Cita ' + result + ' actualizada');
+			console.log('Cita ' + result + ' actualizada');
+			
+		},
+		error : function(result){
+			
+			if(typeof(result.detail) === 'undefined')
+				console.log('There is an error making ajax call. Please check console log');
+			
+			console.log('Ajax call failed .Error result : '+result.detail);
+			
+		},
+		complete: function(result){
+			// $('#box_body_mailchimp > .overlay').remove();
+		}
+	
+		});
+	
+}
+
+function saveCita(eventObject){
+	
+	$.ajax({
+		
+		type : 'POST',
+		url : '/OO_bones/admin/calendar/saveCita',
+		data: {eventValue : eventObject.event_title, eventStart : eventObject.event_start_time , eventEnd : eventObject.event_end_time , backgroundColor : eventObject.event_backgroundColor, borderColor: eventObject.event_borderColor  },
+		dataType : 'text',
+		beforeSend: function(){
+			
+		},
+		success : function(result) {
+			
+			if(typeof(result.status) !== 'undefined' && result.status == 400){
+				alert('No se ha podido actualizar la cita : '+result.detail);
+			}
+			
+			// alert('cita guardada');
+			console.log('Cita ' + result + ' guardada');
+			
+			$('#calendar').fullCalendar('destroy');
+			initCalendar();
+		},
+		error : function(result){
+
+			if(typeof(result.detail) === 'undefined')
+				console.log('There is an error making ajax call. Please check console log');
+			
+			console.log('Ajax call failed .Error result : '+result.detail);
+			
+		},
+		complete: function(result){
+			// $('#box_body_mailchimp > .overlay').remove();
+		}
+	
+	});
+	
+}
+
+function deleteCita(eventId){
+	
+	$.ajax({
+		
+		type : 'POST',
+		url : '/OO_bones/admin/calendar/deleteCita',
+		data: { eventId : eventId },
+		dataType : 'text',
+		beforeSend: function(){
+			
+		},
+		success : function(result) {
+			
+			if(typeof(result.status) !== 'undefined' && result.status == 400){
+				alert('No se ha podido actualizar la cita : '+result.detail);
+			}
+			
+			// alert('cita guardada');
+			console.log('Cita ' + result + ' eliminada');
+			
+			$('#calendar').fullCalendar('removeEvents', result);
+		},
+		error : function(result){
+
+			if(typeof(result.detail) === 'undefined')
+				console.log('There is an error making ajax call. Please check console log');
+			
+			console.log('Ajax call failed .Error result : '+result.detail);
+			
+		},
+		complete: function(result){
+			// $('#box_body_mailchimp > .overlay').remove();
+		}
+	
+	});
+	
+}
+
+
