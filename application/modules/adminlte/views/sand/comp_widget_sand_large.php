@@ -14,10 +14,12 @@
 		</div>
 		
 		<div class="row margin-bottom">
+		
 			<div class="col-lg-12 productlist" id="product_category_table">
 
 
 			</div>
+			
 		</div>
 
 	</div>
