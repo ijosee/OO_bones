@@ -1,6 +1,6 @@
 <?php
 defined ( 'BASEPATH' ) or exit ( 'No direct script access allowed' );
-class Calendar extends Admin_Controller {
+class CalendarController extends Admin_Controller {
 	
 	// Frontend User CRUD
 	public function index() {

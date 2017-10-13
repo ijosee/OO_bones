@@ -1,111 +1,23 @@
-$(document).ready(function(){
-	//$('#customer_list_pos').select2();
-	//$('#product_list_pos').select2();
-	//$('#category_list_pos').select2();
-	
-	$('#customer_list_pos').select2({
-        placeholder: 'Selecionar cliente',
-        ajax: {
-            url: "/OO_bones/admin/pos/getCustomers",
-            dataType: 'json',
-            quietMillis: 100,
-            data: function (term, page) {
-                return {
-                    term: term, //search term
-                    page_limit: 10 // page size
-                };
-            },
-            results: function (data, page) {
-                return { results: data.results };
-            }
-        }
-    });
-	
-	$('#product_list_pos').select2({
-        placeholder: 'Selecionar producto',
-        ajax: {
-            url: "/OO_bones/admin/pos/getProducts",
-            dataType: 'json',
-            quietMillis: 100,
-            data: function (term, page) {
-                return {
-                    term: term, //search term
-                    page_limit: 10 // page size
-                };
-            },
-            results: function (data, page) {
-                return { results: data.results };
-            }
-        }
-    });
-	
-	$('#category_list_pos').select2({
-        placeholder: 'Selecionar categoria',
-        ajax: {
-            url: "/OO_bones/admin/pos/getCategories",
-            dataType: 'json',
-            quietMillis: 100,
-            data: function (term, page) {
-                return {
-                    term: term, //search term
-                    page_limit: 10 // page size
-                };
-            },
-            results: function (data, page) {
-                return { results: data.results };
-            }
-        }
-    });
-	
-	getAllProducts();
-	
-	
-	
-});
-
-
-function getAllProducts(){
-    
-    $.getJSON("/OO_bones/admin/pos/getProductsWithPrice", function(result){
-        $.each(result, function(index,value){
-
-            var template_html = "<div class='col-md-3 column productbox'> " 
-                               +"<img src='#image#' class='img-responsive'> "
-                               +"<div class='producttitle'>#name#</div> "
-                                   +"<div class='productprice'> "
-                                       +"<div class='pull-right' onclick='addItemBill(#id#)' > " 
-                                            +"<a href='#' class='btn btn-danger btn-sm' role='button'>Añadir</a> "
-                                       +"</div> "
-                                       +"<div class='pricetext'>#price# €</div> "
-                                    +"</div> "
-                               +"</div> " ; 
-            template_html = template_html.replace('#id#',value.id);
-            template_html = template_html.replace('#image#',value.image);
-            template_html = template_html.replace('#name#',value.name);
-            template_html = template_html.replace('#price#',value.price);
-            $("#product_category_table").append(template_html);
-
-        });
-    });
-    
-}
-
-
-
-
-
-
 function addItemBill(item_id){
 
     //var item_id = $(this).attr('data-id');
-
-
+	var customer_id = $('#select2-customer_list_pos-container').attr('data-id'); 
+	var invoice_id = $('#table_invoice_id').attr('data-id') ; 
+	
+	if(typeof(customer_id) === 'undefined' || customer_id === 0 ){
+		return console.log('The customer id is empty') ;
+	}else if(invoice_id === "0"){
+		console.log('First item in invoice');
+	}
+		
+	$('#table_invoice_wrap').attr('hidden',false) ;
+	
     $.ajax({
         
         type : 'POST',
-        url : '/OO_bones/admin/bill/addBillItem',
-        data: { item_id : item_id , customer },
-        dataType : 'json',
+        url : '/OO_bones/admin/invoicecontroller/addBillItem',
+        data: { item_id : item_id , customer_id : customer_id},
+        dataType : 'text',
         beforeSend: function(){
             
         },
@@ -143,7 +55,7 @@ function delItemBill(item_id){
     $.ajax({
         
         type : 'POST',
-        url : '/OO_bones/admin/bill/delBillItem',
+        url : '/OO_bones/admin/invoicecontroller/delBillItem',
         data: { eventId : eventId },
         dataType : 'text',
         beforeSend: function(){
@@ -185,7 +97,7 @@ function updateItemBillValue(item_id){
     $.ajax({
         
         type : 'POST',
-        url : '/OO_bones/admin/bill/updateBillItem',
+        url : '/OO_bones/admin/invoicecontroller/updateBillItem',
         data: { eventId : eventId },
         dataType : 'text',
         beforeSend: function(){
@@ -242,7 +154,3 @@ function checkBill(item_id){
 
 
 }
-
-
-
-

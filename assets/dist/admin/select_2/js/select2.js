@@ -1561,6 +1561,7 @@ S2.define('select2/selection/single',[
 
     $rendered.empty().append(formatted);
     $rendered.prop('title', selection.title || selection.text);
+    $rendered.attr('data-id', selection.id || 0);
   };
 
   return SingleSelection;

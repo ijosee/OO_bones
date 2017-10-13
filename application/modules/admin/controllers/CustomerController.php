@@ -1,9 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Employee extends Admin_Controller {
-    
-    
+class CustomerController extends Admin_Controller {
     
     public function __construct()
     {
@@ -11,29 +9,25 @@ class Employee extends Admin_Controller {
         $this->load->library('form_builder');
     }
     
-    // Frontend Employee CRUD
+    // Frontend User CRUD
     public function index()
     {
-        $crud = $this->generate_crud('employees','Employees');
+        $crud = $this->generate_crud('customers','Customer');
         
-        $crud->columns('first_name','last_name','email','phone','active','has_photo','salary','last_login','company','path_photo');
-        $crud->set_field_upload('path_photo','application/assets/employee/');
+        $crud->columns( 'first_name','last_name','email','phone','active','last_login');
+        
         $crud->display_as('first_name','Nombre');
         $crud->display_as('last_name','Apellido');
         $crud->display_as('email','Mail');
         $crud->display_as('phone','Teléfono');
         $crud->display_as('active','Activo');
-        $crud->display_as('has_photo','Foto');
-        $crud->display_as('last_login','Último Login');
-        $crud->display_as('salary','Salario');
+        $crud->display_as('last_login','Última visita');
         $crud->display_as('observations','Observaciones');
-        $crud->display_as('company','Empresa');
-        $crud->display_as('path_photo','Url foto');
        
-        $this->unset_crud_fields('ip_address', 'last_login');
+        $this->unset_crud_fields('username','ip_address', 'last_login', 'company');
         
-        //$crud->fields('first_name', 'last_name', 'email','phone', 'active','has_photo','last_login','observations');
-        
+        $crud->fields('first_name', 'last_name', 'email','phone', 'active','last_login','observations');
+        $crud->field_type('observations','text');
         
         // only webmaster and admin can change member groups
         if ($crud->getState()=='list' || $this->ion_auth->in_group(array('webmaster', 'admin')))
@@ -41,7 +35,7 @@ class Employee extends Admin_Controller {
             //action when list and web master or admin active
         }
         
-        $this->mPageTitle = 'Empleados';
+        $this->mPageTitle = 'Clientes';
         
         $this->render_crud();
     }
@@ -112,7 +106,13 @@ class Employee extends Admin_Controller {
     
     // Frontend User Reset Password
 
-    
+    public function getCustomers($id = 0){
+        
+       
+        
+        return  "getted";
+        
+    }
     
     
 }

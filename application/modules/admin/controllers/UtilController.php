@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Util extends Admin_Controller {
+class UtilController extends Admin_Controller {
 
 	private $mLatestSqlFile;
 	private $mBackupSqlFiles;

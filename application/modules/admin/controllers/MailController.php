@@ -2,7 +2,8 @@
 defined ( 'BASEPATH' ) or exit ( 'No direct script access allowed' );
 
 use \DrewM\MailChimp\MailChimp;
-class Mail extends Admin_Controller {
+
+class MailController extends Admin_Controller {
 	public function __construct() {
 		parent::__construct ();
 	}
@@ -38,12 +39,17 @@ class Mail extends Admin_Controller {
 		$this->render_crud ( $pageType );
 	}
 	
+	/**
+	 * ------------------------------------------ PRIVATE METHODS
+	 */
+	
 	public function checkboxMail($post_array) {
 		$post_array_for_id = str_replace ( "@", "_", $post_array );
 		$post_array_for_id = str_replace ( ".", "-", $post_array_for_id );
 		
 		return '<input type="checkbox" id="' . $post_array_for_id . '" onchange="addDeleteMemberToList(this)"> ' . $post_array;
 	}
+	
 	
 	/**
 	 * ------------------------------------------ API KEY
@@ -60,23 +66,26 @@ class Mail extends Admin_Controller {
 	/**
 	 * ------------------------------------------ CAMPAIGNS
 	 */
-	 
-	 public function sendCampaing() {
-		if (isset ( $_POST ['api_key'] ) && isset ( $_POST ['campaign_id'] )) {
+	
+	public function createCampaigns() {
+		
+		if (isset ( $_POST ['api_key'] ) && isset ( $_POST ['requestApi'] )) {
+			
+			//var_dump($_POST ['requestApi']);
+			
 			$mailchimp = new Mailchimp ( $_POST ['api_key'] );
-			
-			// $arrayTestMail = array(
-			// "test_emails" => ["ijose@aol"]
-			// ,"send_type" => "html"
-			// );
-			
-			$result = $mailchimp->post ( 'campaigns/' . $_POST ['campaign_id'] . '/actions/send' );
+			$result = $mailchimp->post ( 'campaigns' , $_POST ['requestApi']);
 			
 			echo json_encode ( $result, JSON_PRETTY_PRINT );
 		} else {
-			echo 'Api key is empty, please check console log : ' . $_POST ['api_key'];
+			echo 'REPLICATE Campaigns . Api key is empty, please check console log : ' . $_POST ['api_key'];
 		}
+		
 	}
+	
+	
+	// @TODO - getCampaigns && getCampaign must be one function
+	// --------------------------------------------------------
 	
 	public function getCampaigns() {
 		
@@ -103,6 +112,35 @@ class Mail extends Admin_Controller {
 			echo 'GET Campaigns . Api key is empty, please check console log : ' . $_POST ['api_key'];
 		}
 	}
+	// --------------------------------------------------------
+	
+	public function replicateCampaigns() {
+		
+		if (isset ( $_POST ['api_key'] ) && isset ( $_POST ['campaign_id'] )) {
+			
+			$mailchimp = new Mailchimp ( $_POST ['api_key'] );
+			$result = $mailchimp->post ( 'campaigns/' . $_POST ['campaign_id'].'/actions/replicate'  );
+			
+			echo json_encode ( $result, JSON_PRETTY_PRINT );
+		} else {
+			echo 'REPLICATE Campaigns . Api key is empty, please check console log : ' . $_POST ['api_key'];
+		}
+		
+	}
+	 
+	 public function sendCampaing() {
+		if (isset ( $_POST ['api_key'] ) && isset ( $_POST ['campaign_id'] )) {
+			
+			$mailchimp = new Mailchimp ( $_POST ['api_key'] );
+			
+			$result = $mailchimp->post ( 'campaigns/' . $_POST ['campaign_id'] . '/actions/send' );
+			
+			echo json_encode ( $result, JSON_PRETTY_PRINT );
+		} else {
+			echo 'Api key is empty, please check console log : ' . $_POST ['api_key'];
+		}
+	}
+	
 	
 	public function deleteCampaigns() {
 		
@@ -118,43 +156,12 @@ class Mail extends Admin_Controller {
 		
 	}
 	
-	public function replicateCampaigns() {
-		
-		if (isset ( $_POST ['api_key'] ) && isset ( $_POST ['campaign_id'] )) {
-			
-			$mailchimp = new Mailchimp ( $_POST ['api_key'] );
-			$result = $mailchimp->post ( 'campaigns/' . $_POST ['campaign_id'].'/actions/replicate'  );
-			
-			echo json_encode ( $result, JSON_PRETTY_PRINT );
-		} else {
-			echo 'REPLICATE Campaigns . Api key is empty, please check console log : ' . $_POST ['api_key'];
-		}
-		
-	}
-	
-	public function createCampaigns() {
-		
-		if (isset ( $_POST ['api_key'] ) && isset ( $_POST ['requestApi'] )) {
-			
-			//var_dump($_POST ['requestApi']);
-			
-			$mailchimp = new Mailchimp ( $_POST ['api_key'] );
-			$result = $mailchimp->post ( 'campaigns' , $_POST ['requestApi']);	
-			
-			echo json_encode ( $result, JSON_PRETTY_PRINT );
-		} else {
-			echo 'REPLICATE Campaigns . Api key is empty, please check console log : ' . $_POST ['api_key'];
-		}
-		
-	}
-	
-	
-	
 	/**
 	 * ------------------------------------------ LISTS
+	 *  Get list of users added to a campaign
 	 */
 	
-	
+	// get all lists
 	public function getLists() {
 		if (isset ( $_POST ['api_key'] )) {
 			$mailchimp = new Mailchimp ( $_POST ['api_key'] );
@@ -167,7 +174,7 @@ class Mail extends Admin_Controller {
 		}
 	}
 
-	
+	// get members in LIST
 	public function getCustomersEmailsInList() {
 		if (isset ( $_POST ['api_key'] ) && isset ( $_POST ['list_id'] )) {
 			

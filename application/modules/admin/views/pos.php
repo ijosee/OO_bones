@@ -1,4 +1,5 @@
-<script src="<?php echo base_url('assets/dist/admin/admin_pos.js');?>"></script>
+<script src="<?php echo base_url('assets/dist/admin/pos/admin_pos.js');?>"></script>
+<script src="<?php echo base_url('assets/dist/admin/pos/bill.js');?>"></script>
 <script src="<?php echo base_url('assets/dist/admin/select_2/js/select2.js');?>"></script>
 
 

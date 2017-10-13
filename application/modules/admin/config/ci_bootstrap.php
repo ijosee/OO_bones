@@ -85,7 +85,7 @@ $config['ci_bootstrap'] = array(
                         
                         // select_2
                         'assets/dist/admin/select_2/css/select2.css',
-                        'assets/dist/admin/admin_pos.css'
+                        'assets/dist/admin/pos/admin_pos.css'
                     
                     // 'assets/dist/admin/jvectormap/jquery-jvectormap-1.2.2.css',
                     // 'assets/dist/admin/morris/morris.css',
@@ -105,43 +105,43 @@ $config['ci_bootstrap'] = array(
         'menu' => array(
                 'home' => array(
                         'name' => 'Home',
-                        'url' => '',
+                        'url' => 'homecontroller',
                         'icon' => 'fa fa-home'
                 ),
                 'customer' => array(
                         'name' => 'Clientes',
-                        'url' => 'customer',
+                        'url' => 'customercontroller',
                         'icon' => 'fa fa-user',
                         'children' => array(
-                                'Listar' => 'customer'
+                                'Listar' => 'customercontroller'
                             // ,'Crear' => 'customer/create'
                         )
                 ),
                 'employee' => array(
                         'name' => 'Empleado',
-                        'url' => 'employee',
+                        'url' => 'employeecontroller',
                         'icon' => 'fa fa-user-circle',
                         'children' => array(
-                                'Listar' => 'employee'
+                                'Listar' => 'employeecontroller'
                             // ,'Crear' => 'customer/create'
                         )
                 ),
                 'user' => array(
                         'name' => 'Usuarios',
-                        'url' => 'user',
+                        'url' => 'usercontroller',
                         'icon' => 'fa fa-users',
                         'children' => array(
-                                'Listar' => 'user',
+                                'Listar' => 'usercontroller',
                                 'Crear' => 'user/create',
                                 'Grupos de usuarios' => 'user/group'
                         )
                 ),
                 'products' => array(
                         'name' => 'Productos',
-                        'url' => 'products',
+                        'url' => 'productscontroller',
                         'icon' => 'fa fa-truck',
                         'children' => array(
-                                'Listar' => 'product',
+                                'Listar' => 'productcontroller',
                                 'Categorias producto' => 'product_category'
                         )
                 ),
@@ -156,25 +156,25 @@ $config['ci_bootstrap'] = array(
                 // ),
                 'panel' => array(
                         'name' => 'Usuarios Admin',
-                        'url' => 'panel',
+                        'url' => 'panelcontroller',
                         'icon' => 'fa fa-cog',
                         'children' => array(
-                                'Listar' => 'panel/admin_user',
-                                'Crear ' => 'panel/admin_user_create',
-                                'Grupos Usuarios Admin' => 'panel/admin_user_group'
+                                'Listar' => 'panelcontroller/admin_user',
+                                'Crear ' => 'panelcontroller/admin_user_create',
+                                'Grupos Usuarios Admin' => 'panelcontroller/admin_user_group'
                         )
                 ),
                 'util' => array(
                         'name' => 'Utilidades',
-                        'url' => 'util',
+                        'url' => 'utilcontroller',
                         'icon' => 'fa fa-cogs',
                         'children' => array(
-                                'Versión de la base de datos' => 'util/list_db'
+                                'Versión de la base de datos' => 'utilcontroller/list_db'
                         )
                 ),
                 'logout' => array(
                         'name' => 'Salir',
-                        'url' => 'panel/logout',
+                        'url' => 'panelcontroller/logout',
                         'icon' => 'fa fa-sign-out'
                 )
         ),
@@ -285,17 +285,17 @@ $config['ci_bootstrap'] = array(
         'mail_customer' => array(
                 'Usar MailChimp' => array(
                         'name' => 'Usar MailChimp',
-                        'url' => 'mail',
+                        'url' => 'mailcontroller',
                         'icon' => 'fa fa-plane'
                 ),
                 'Crear una cita' => array(
                         'name' => 'Crear una cita',
-                        'url' => 'calendar',
+                        'url' => 'calendarcontroller',
                         'icon' => 'fa fa-calendar'
                 ),
                 'POS' => array(
                         'name' => 'POS',
-                        'url' => 'pos',
+                        'url' => 'poscontroller',
                         'icon' => 'fa fa-money'
                 )
         ),

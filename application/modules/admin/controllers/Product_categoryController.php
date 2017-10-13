@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Product_category extends Admin_Controller {
+class Product_categoryController extends Admin_Controller {
 
 	public function __construct()
 	{

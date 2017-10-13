@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Pos extends Admin_Controller {
+class PosController extends Admin_Controller {
     
     
     // Frontend User POS
@@ -17,32 +17,19 @@ class Pos extends Admin_Controller {
     
     public function getCustomers (){
         
-        $return_arr = array();
+    		$return_arr['results'] = array();
         
-        $query = $this->db->get('customers');
+        $this->load->model('Customer_model');
         
-        foreach ($query->result() as $row) {	
+        $query = $this->Customer_model->read();
+        
+        foreach ($query as $row) {	
             $row_array['id'] = $row->customer_id;
             $row_array['text'] = utf8_encode($row->last_name.",".$row->first_name);
-            array_push($return_arr, $row_array);
+            array_push($return_arr['results'], $row_array);
         }
         
-        $ret = array();
-        /*
-         * this is the return for a single result needed by select2 for
-         * initSelection
-         */
-        if (isset($id)) {
-            $ret = $row_array;
-        }        /*
-        * this is the return for a multiple results needed by select2
-        * Your results in select2 options needs to be data.result
-        */
-        else {
-            $ret['results'] = $return_arr;
-        }
-        
-        echo json_encode($ret);
+        echo json_encode($return_arr);
         
     }
     
@@ -54,32 +41,17 @@ class Pos extends Admin_Controller {
    
     public function getProducts (){
         
-        $return_arr = array();
+    	    $return_arr['results'] = array();
         
         $query = $this->db->get('products');
         
         foreach ($query->result() as $row) {
             $row_array['id'] = $row->id;
             $row_array['text'] = utf8_encode($row->name);
-            array_push($return_arr, $row_array);
+            array_push( 	$return_arr['results'], $row_array);
         }
         
-        $ret = array();
-        /*
-         * this is the return for a single result needed by select2 for
-         * initSelection
-         */
-        if (isset($id)) {
-            $ret = $row_array;
-        }        /*
-        * this is the return for a multiple results needed by select2
-        * Your results in select2 options needs to be data.result
-        */
-        else {
-            $ret['results'] = $return_arr;
-        }
-        
-        echo json_encode($ret);
+        echo json_encode($return_arr);
         
     }
     
@@ -87,32 +59,17 @@ class Pos extends Admin_Controller {
     /// is the mixting , if exist update else insert
     public function replaceProducts (){
     	
-    	$return_arr = array();
+    	$return_arr['results'] = array();
     	
     	$query = $this->db->get('products');
     	
     	foreach ($query->result() as $row) {
     		$row_array['id'] = $row->id;
     		$row_array['text'] = utf8_encode($row->name);
-    		array_push($return_arr, $row_array);
+    		array_push($return_arr['results'], $row_array);
     	}
     	
-    	$ret = array();
-    	/*
-    	 * this is the return for a single result needed by select2 for
-    	 * initSelection
-    	 */
-    	if (isset($id)) {
-    		$ret = $row_array;
-    	}        /*
-    	* this is the return for a multiple results needed by select2
-    	* Your results in select2 options needs to be data.result
-    	*/
-    	else {
-    		$ret['results'] = $return_arr;
-    	}
-    	
-    	echo json_encode($ret);
+    	echo json_encode($return_arr);
     	
     }
     
@@ -159,7 +116,7 @@ class Pos extends Admin_Controller {
     
     public function getCategories (){
         
-        $return_arr = array();
+    		$return_arr['results'] = array();
         
         $query = $this->db->get('category');
         
@@ -169,22 +126,7 @@ class Pos extends Admin_Controller {
             array_push($return_arr, $row_array);
         }
         
-        $ret = array();
-        /*
-         * this is the return for a single result needed by select2 for
-         * initSelection
-         */
-        if (isset($id)) {
-            $ret = $row_array;
-        }        /*
-        * this is the return for a multiple results needed by select2
-        * Your results in select2 options needs to be data.result
-        */
-        else {
-            $ret['results'] = $return_arr;
-        }
-        
-        echo json_encode($ret);
+        echo json_encode($return_arr);
         
     }
     

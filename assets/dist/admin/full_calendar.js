@@ -110,7 +110,7 @@ function initCalendar() {
 	
 	$.ajax({
 		type : 'POST',
-		url : '/OO_bones/admin/calendar/initCalendar',
+		url : '/OO_bones/admin/calendarcontroller/initCalendar',
 		dataType : 'json',
 		beforeSend: function(){
 			// $('#box_body_mailchimp').append("<div class='overlay'><i
@@ -301,7 +301,7 @@ function updateCita(eventObject){
 	$.ajax({
 		
 		type : 'POST',
-		url : '/OO_bones/admin/calendar/updateCitaDrag',
+		url : '/OO_bones/admin/calendarcontroller/updateCitaDrag',
 		data: { eventId : eventObject.event_id, eventStart : eventObject.event_start_time , eventEnd : eventObject.event_end_time  },
 		dataType : 'text',
 		beforeSend: function(){
@@ -338,7 +338,7 @@ function saveCita(eventObject){
 	$.ajax({
 		
 		type : 'POST',
-		url : '/OO_bones/admin/calendar/saveCita',
+		url : '/OO_bones/admin/calendarcontroller/saveCita',
 		data: {eventValue : eventObject.event_title, eventStart : eventObject.event_start_time , eventEnd : eventObject.event_end_time , backgroundColor : eventObject.event_backgroundColor, borderColor: eventObject.event_borderColor  },
 		dataType : 'text',
 		beforeSend: function(){
@@ -377,7 +377,7 @@ function deleteCita(eventId){
 	$.ajax({
 		
 		type : 'POST',
-		url : '/OO_bones/admin/calendar/deleteCita',
+		url : '/OO_bones/admin/calendarcontroller/deleteCita',
 		data: { eventId : eventId },
 		dataType : 'text',
 		beforeSend: function(){

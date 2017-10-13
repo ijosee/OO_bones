@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Customer_color extends Admin_Controller {
+class Customer_colorController extends Admin_Controller {
     
     
     
