@@ -3,57 +3,107 @@ defined ( 'BASEPATH' ) or exit ( 'No direct script access allowed' );
 class InvoiceController extends Admin_Controller {
 	
 
+	public function readInvoice() {
 
-	public function addBillItem() {
-
-		if (isset ($_POST['customer_id']) && !isset ($_POST['invoice_id'])){
+		if (isset ($_POST['invoice_id'])){
 			
 			$this->load->model('Invoice_model');
-			
-			$this->Invoice_model->create();
-			
-		}		
-		
 
-// 		if (isset ( $_POST ['item_id'] ) && isset ( $_POST ['customer_id'] )) {
-			
-// 			// existe factura para este item y este usuario de hoy
+			$result = $this->Invoice_model->read($_POST['invoice_id']);
 
-// 			$this->db->where ('item_id', $_POST ['item_id']) ; 
-// 			$where = $this->db->where ('customer_id', $_POST ['customer_id']); 
-// 			$number = $where->from("invoice_customer") ;
-// 			echo "NUMBER  : " . $number;
+			$result_modified = array();
 
-// 				// -- > no : creo una factura
-// 				// -- crear nueva fatura en bill
-// 				$item = array (
+			$result_modified['results']['date'] =  date("d-m-Y H:i:s") ;
+			$result_modified['results']['invoice_id'] =  $result[0]->invoice_id ;
+			$result_modified['results']['customer_id'] =  $result[0]->customer_id  ;
+			$result_modified['results']['customer_name'] =  $result[0]->customer_name ;
+			$result_modified['results']['items'] =  $result ;
 
-// 					'item_id' => $_POST ['item_id'] 
-// 					,'customer_id' => $_POST ['customer_id'] 
-// 				);
-			
-// 				$this->db->insert ( 'invoice_customer', $item );
-// 				// -- crear nueva fila en bill_customer
+			echo json_encode($result_modified);
 
-// 				// -- obtener id de la factura en bill
-
-// 				// -- actualizar bill_product
-
-// 				// devolvemos true
-
-
-			
-
-// 			// -- > si : debemos añadir una fila extra bill_product
-// 				// -- actualizamos bill product
-
-// 				// devolvemos true
-
-// 			echo 'Final del contolador de invoice' ;
-
-// 		}
+		}else{
+			echo 'Item id is empty, please fill up ' ;
+		}
 
 	}
 
+	public function addInvoiceItem() {
+
+		if (isset($_POST['item_id'])
+			&& isset ($_POST['customer_id'])
+			&& isset ($_POST['invoice_id'])){
+			
+			$this->load->model('Invoice_model');
+
+			$invoice_id = $this->Invoice_model->create();
+
+			if((int)$invoice_id > 0){
+
+				$result = $this->Invoice_model->read($invoice_id);
+				echo json_encode($result);
+
+			}else{
+
+				echo 'Inserted, but impossible get invoice by id, try again' ; 
+
+			}
+			
+		}else{
+			echo 'Item id is empty, please fill up ' ;
+		}
+
+	}
+
+	public function deleteInvoiceItem() {
+
+		if (isset($_POST['item_id'])
+			&& isset ($_POST['customer_id'])
+			&& isset ($_POST['invoice_id'])){
+			
+			$this->load->model('Invoice_model');
+
+			$invoice_id = $this->Invoice_model->deleteItem();
+
+			if((int)$invoice_id > 0){
+
+				$result = $this->Invoice_model->read($invoice_id);
+				echo json_encode($result);
+
+			}else{
+
+				echo 'Inserted, but impossible get invoice by id, try again' ; 
+
+			}
+			
+		}else{
+			echo 'Item id is empty, please fill up ' ;
+		}
+
+	}
+
+	public function deleteInvoice() {
+
+		if (isset ($_POST['customer_id'])
+			&& isset ($_POST['invoice_id'])){
+			
+			$this->load->model('Invoice_model');
+
+			$result = $this->Invoice_model->delete();
+
+			if((int)$result > 0){
+
+				 echo $result;
+
+			}else{
+
+				echo 'Inserted, but impossible get invoice by id, try again' ; 
+
+			}
+
+		}else{
+			echo 'Item id is empty, please fill up ' ;
+		}
+
+	}
 
 }

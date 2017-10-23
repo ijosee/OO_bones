@@ -10,14 +10,16 @@ class PosController extends Admin_Controller {
         $this->render('pos');
     }
     
+   //
+   //
+   //........................... CUSTOMERS
+   //
+   //
     
-    
-    // get elements
-    // GET CUSTOMERS
     
     public function getCustomers (){
         
-    		$return_arr['results'] = array();
+    	$return_arr['results'] = array();
         
         $this->load->model('Customer_model');
         
@@ -33,6 +35,7 @@ class PosController extends Admin_Controller {
         
     }
     
+
    //
    //
    //........................... PRODUCTS
@@ -56,7 +59,9 @@ class PosController extends Admin_Controller {
     }
     
     
+
     /// is the mixting , if exist update else insert
+    // replace in CODEIGNITER
     public function replaceProducts (){
     	
     	$return_arr['results'] = array();
@@ -74,8 +79,6 @@ class PosController extends Admin_Controller {
     }
     
     
-    
-    
     public function getProductsWithPrice (){
         
         $return_arr = array();
@@ -90,26 +93,9 @@ class PosController extends Admin_Controller {
             array_push($return_arr, $row_array);
         }
         
-        $ret = array();
-        /*
-         * this is the return for a single result needed by select2 for
-         * initSelection
-         */
-        if (isset($id)) {
-            $ret = $row_array;
-        }        /*
-        * this is the return for a multiple results needed by select2
-        * Your results in select2 options needs to be data.result
-        */
-        else {
-            $ret = $return_arr;
-        }
-        
-        echo json_encode($ret);
+        echo json_encode($return_arr);
         
     }
-    
-    
     
     
     // Categories
