@@ -82,16 +82,17 @@
                 <th>Total:</th>
                 <td id="modal_pos_payment_total">00.0 €</td>
               </tr>
-            </tbody></table>
+            </tbody>
+          </table>
           </div>
           <h5 style="font-weight: bold;">Método de pago :</h5>
           <p>
-            <a class="btn btn-info btn-sq-lg btn-primary pull-right paymentMethod">
-                <i class="fa fa-money fa-5x"></i><br/>
+            <a class="btn btn-info btn-sq-lg btn-primary pull-right paymentMethod" data-id = "CASH">
+                <i class="fa fa-money fa-5x" ></i><br/>
                 Pago <br>Efectivo
             </a>
-             <a class="btn btn-info btn-sq-lg btn-primary paymentMethod">
-                <i class="fa fa-credit-card fa-5x"></i><br/>
+             <a class="btn btn-info btn-sq-lg btn-primary paymentMethod" data-id = "CREDIT">
+                <i class="fa fa-credit-card fa-5x" ></i><br/>
                 Pago <br>Tarjeta
             </a>
 

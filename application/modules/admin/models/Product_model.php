@@ -67,18 +67,51 @@ class Product_model extends CI_Model {
 	
 	// R
 	public function read() {
+
 		if (isset ( $_POST ['product_id'] )) {
 			
 			$this->db->where ( 'product_id', $_POST ['product_id'] );
+			$result = $this->db->get ( 'products' );
+			
+			echo json_encode ( $result );
+
+		}
+		else if (isset ( $_POST ['provider_string'] )) {
+			
+			$this->db->where ( 'provider_string', $_POST ['provider_string'] );
+
+			return $this->db->get ( 'products' );
+
+		}else {
+			
+
+			return $this->db->get('products');
+
+		}
+
+	}
+	
+	public function readCategories($provider_string = NULL) {
+
+		if (isset ( $_POST ['provider_string'] )) {
+			
+			$this->db->where ( 'provider_string', $_POST ['provider_string'] );
 			$result = $this->db->get ( 'product' );
 			
 			echo json_encode ( $result );
+
 		} else {
 			
-			echo 'Product id is empty, nothing to read';
+			$this->db->select('provider_string');
+			$this->db->group_by('provider_string');
+			$this->db->order_by('provider_string');
+
+			return $this->db->get('products');
+			
 		}
+
 	}
-	
+
 	// U
 	public function update() {
 		$required_fields = array (

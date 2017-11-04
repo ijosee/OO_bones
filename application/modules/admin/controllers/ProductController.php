@@ -146,4 +146,59 @@ class ProductController extends Admin_Controller {
 		$this->mPageTitle = 'Reset User Password';
 		$this->render('user/reset_password');
 	}
+
+	// POS Products
+	public function getProducts (){
+
+		$this->load->model('Product_model');
+		
+		$query = $this->Product_model->read();
+        
+    	$return_arr['results'] = array();
+        
+        foreach ($query->result() as $row) {
+            $row_array['id'] = $row->id;
+            $row_array['text'] = utf8_encode($row->name);
+            array_push($return_arr['results'], $row_array);
+        }
+        
+        echo json_encode($return_arr);
+    }
+
+    public function getProductsWithPrice (){
+
+    	$this->load->model('Product_model');
+		
+		$query = $this->Product_model->read();
+        
+        $return_arr = array();
+        
+        foreach ($query->result() as $row) {
+            $row_array['id'] = $row->id;
+            $row_array['name'] = $row->name;
+            $row_array['price'] = $row->price_sale;
+            $row_array['image'] = "http://placehold.it/460x250/1EAB49/ffffff&text=Producto";
+            array_push($return_arr, $row_array);
+        }
+        
+        echo json_encode($return_arr);
+    }
+    
+    // POS Categories
+    public function getCategories (){
+
+    	$this->load->model('Product_model');
+		
+		$query = $this->Product_model->readCategories();
+        
+    	$return_arr['results'] = array();
+        
+        foreach ($query->result() as $row) {
+            $row_array['id'] = utf8_encode($row->provider_string);
+            $row_array['text'] = utf8_encode($row->provider_string);
+            array_push($return_arr['results'], $row_array);
+        }
+        
+        echo json_encode($return_arr);
+    }
 }

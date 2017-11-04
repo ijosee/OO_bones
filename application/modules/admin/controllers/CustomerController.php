@@ -104,13 +104,23 @@ class CustomerController extends Admin_Controller {
         $this->render_crud();
     }
     
-    // Frontend User Reset Password
+    // POS Customers
 
-    public function getCustomers($id = 0){
+     public function getCustomers (){
         
-       
+        $return_arr['results'] = array();
         
-        return  "getted";
+        $this->load->model('Customer_model');
+        
+        $query = $this->Customer_model->read();
+        
+        foreach ($query as $row) {  
+            $row_array['id'] = $row->customer_id;
+            $row_array['text'] = utf8_encode($row->last_name.",".$row->first_name);
+            array_push($return_arr['results'], $row_array);
+        }
+        
+        echo json_encode($return_arr);
         
     }
     

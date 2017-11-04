@@ -46,7 +46,8 @@ $config['ci_bootstrap'] = array(
                         'assets/dist/admin/moment/moment.js',
                         'assets/dist/admin/bootstrap-datepicker/dist/js/daterangepicker.js',
                         'assets/dist/admin/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js',
-                        'assets/dist/admin/bootstrap-datepicker/dist/locales/bootstrap-datepicker.es.min.js'
+                        'assets/dist/admin/bootstrap-datepicker/dist/locales/bootstrap-datepicker.es.min.js',
+                        'assets/dist/admin/toggle/bootstrap-toggle.min.js'
                 
                 ),
                 'foot' => array(
@@ -70,7 +71,7 @@ $config['ci_bootstrap'] = array(
                         'assets/dist/admin/adminlte.min.css',
                         'assets/dist/admin/lib.min.css',
                         'assets/dist/admin/app.min.css',
-                        'assets/dist/admin/bootstrap/bootstrap.min.css',
+                        'assets/dist/admin/bootstrap/bootstrap.css',
                         'assets/dist/admin/_all-skins.min.css',
                         // fonts
                         'assets/dist/admin/font-awesome.css',
@@ -85,7 +86,10 @@ $config['ci_bootstrap'] = array(
                         
                         // select_2
                         'assets/dist/admin/select_2/css/select2.css',
-                        'assets/dist/admin/pos/admin_pos.css'
+                        'assets/dist/admin/pos/admin_pos.css',
+                        //datable
+                        'assets/dist/admin/datatable/css/dataTables.bootstrap.css',
+                        'assets/dist/admin/toggle/bootstrap-toggle.min.css'
                     
                     // 'assets/dist/admin/jvectormap/jquery-jvectormap-1.2.2.css',
                     // 'assets/dist/admin/morris/morris.css',
@@ -296,7 +300,11 @@ $config['ci_bootstrap'] = array(
                 'POS' => array(
                         'name' => 'POS',
                         'url' => 'poscontroller',
-                        'icon' => 'fa fa-money'
+                        'icon' => 'fa fa-money',
+                        'children' => array(
+                                'Pos' => 'poscontroller',
+                                'Historial' => 'poscontroller/history'
+                        )
                 )
         ),
         

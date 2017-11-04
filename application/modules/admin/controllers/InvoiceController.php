@@ -17,9 +17,37 @@ class InvoiceController extends Admin_Controller {
 			$result_modified['results']['invoice_id'] =  $result[0]->invoice_id ;
 			$result_modified['results']['customer_id'] =  $result[0]->customer_id  ;
 			$result_modified['results']['customer_name'] =  $result[0]->customer_name ;
+			$result_modified['results']['created_time'] =  $result[0]->created_time ;
+			$result_modified['results']['customer_comment'] =  $result[0]->comment ;
+			$result_modified['results']['active'] =  $result[0]->active ;
+			$result_modified['results']['on_hold'] =  $result[0]->on_hold ;
+			$result_modified['results']['paid'] =  $result[0]->paid ;
 			$result_modified['results']['items'] =  $result ;
 
 			echo json_encode($result_modified);
+
+		}else{
+
+			$this->load->model('Invoice_model');
+
+			$result = $this->Invoice_model->read();
+
+			echo json_encode($result);
+
+		}
+
+	}
+
+	public function updateInvoice() {
+
+		if (isset ($_POST['invoice_id'])){
+			
+			$this->load->model('Invoice_model');
+
+			$result = $this->Invoice_model->update();
+
+
+			echo $result;
 
 		}else{
 			echo 'Item id is empty, please fill up ' ;
@@ -103,6 +131,12 @@ class InvoiceController extends Admin_Controller {
 		}else{
 			echo 'Item id is empty, please fill up ' ;
 		}
+
+	}
+
+	public function confirmInvoice() {
+
+		echo "Confirmada" ; 
 
 	}
 

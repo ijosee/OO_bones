@@ -33,23 +33,33 @@ $config['ci_bootstrap'] = array(
     // Default scripts to embed at page head or end
     'scripts' => array(
         'head' => array(
-            'assets/dist/frontend/jquery-3.2.1.min.js',
-            'assets/dist/frontend/bootstrap/bootstrap.js'
+            'assets/dist/frontend/jquery/jquery-3.2.1.min.js'
         ),
         'foot' => array(
             //'assets/dist/frontend/lib.min.js',
             //'assets/dist/frontend/app.min.js',
-//             'assets/dist/frontend/popper/popper.min.js',
-//             'assets/dist/frontend/touch-swipe/jquery.touch-swipe.min.js',
-//             'assets/dist/frontend/custom.js',
-//             'assets/dist/frontend/bootstrap-carousel-swipe/bootstrap-carousel-swipe.js',
-//             'assets/dist/frontend/dropdown/js/script.min.js',
-//             'assets/dist/frontend/imagesloaded/imagesloaded.pkgd.min.js',
-//             'assets/dist/frontend/smooth-scroll/smooth-scroll.js',
-//             'assets/dist/frontend/tether/tether.min.js',
-//             'assets/dist/frontend/theme/js/script.js',
-//             'assets/dist/frontend/mobirise-gallery/script.js',
-//             'assets/dist/frontend/mobirise-gallery/player.min.js'
+            // 'assets/dist/frontend/custom.js',
+
+             'assets/dist/frontend/popper/popper.min.js',
+             'assets/dist/frontend/tether/tether.min.js',
+            'assets/dist/frontend/bootstrap/bootstrap.min.js',
+             'assets/dist/frontend/smooth-scroll/smooth-scroll.js',
+             'assets/dist/frontend/dropdown/js/script.min.js',
+             'assets/dist/frontend/touch-swipe/jquery.touch-swipe.min.js',
+             'assets/dist/frontend/countdown/jquery.countdown.min.js',
+             'assets/dist/frontend/jarallax/jarallax.min.js',
+             'assets/dist/frontend/as-pie-progress/jquery-as-pie-progress.min.js',
+             'assets/dist/frontend/jquery-mb-vimeo_player/jquery.mb.vimeo_player.js',
+             'assets/dist/frontend/masonry/masonry.pkgd.min.js',
+             'assets/dist/frontend/imagesloaded/imagesloaded.pkgd.min.js',
+             'assets/dist/frontend/bootstrap-carousel-swipe/bootstrap-carousel-swipe.js',
+             'assets/dist/frontend/jquery-mb-ytplayer/jquery.mb.ytplayer.min.js',
+             'assets/dist/frontend/theme/js/script.js',
+             'assets/dist/frontend/mobirise-slider-video/script.js',
+             'assets/dist/frontend/mobirise-gallery/player.min.js',
+             'assets/dist/frontend/mobirise-gallery/script.js',
+             'assets/dist/frontend/formoid/formoid.min.js'
+             
         )
     ),
     
@@ -58,14 +68,16 @@ $config['ci_bootstrap'] = array(
         'screen' => array(
 //             'assets/dist/frontend/lib.min.css',
 //             'assets/dist/frontend/app.min.css',
+            'assets/dist/frontend/web/assets/mobirise-icons/mobirise-icons.css',
+            'assets/dist/frontend/tether/tether.min.css',
              'assets/dist/frontend/bootstrap/css/bootstrap.min.css',
-//             'assets/dist/frontend/bootstrap/css/bootstrap-grid.min.css',
-//             'assets/dist/frontend/bootstrap/css/bootstrap-reboot.min.css',
-//             'assets/dist/frontend/dropdown/css/style.css',
-             'assets/dist/frontend/mobirise/css/mbr-additional.css',
-//             'assets/dist/frontend/tether/tether.min.css',
+             'assets/dist/frontend/bootstrap/css/bootstrap-grid.min.css',
+             'assets/dist/frontend/bootstrap/css/bootstrap-reboot.min.css',
+             'assets/dist/frontend/dropdown/css/style.css',
+             'assets/dist/frontend/as-pie-progress/css/progress.min.css',
              'assets/dist/frontend/theme/css/style.css',
-//             'assets/dist/frontend/mobirise-gallery/style.css'
+             'assets/dist/frontend/mobirise-gallery/style.css',
+             'assets/dist/frontend/mobirise/css/mbr-additional.css'
         )
     ),
     

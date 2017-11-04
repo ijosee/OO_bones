@@ -18,7 +18,6 @@
 			<select name="product_list_pos"
 				id="product_list_pos"
 				class="form-control select2 select2-hidden-accessible"
-				onchange="#" 
 				style="width: 100%;"
 				tabindex="-1" 
 				aria-hidden="true" >
@@ -79,13 +78,9 @@
 	
 	
 	<div class="box-footer">
-		<input 
-		type="submit" 
-		name="ctl00$MainContent$btnReset" 
-		value="Borrar"
-		id="MainContent_btnReset" class="btn margin btn-danger"> <a
-			
-		onclick="showPaymentModal()" class="btn btn-primary margin pull-right">Pago</a>
-		<a onclick="PopupHold()" class="btn btn-success margin pull-right">Postponer</a>
+		<a onclick="deleteInvoice()" class="btn margin btn-danger">Borrar</a> 
+
+		<a onclick="showPaymentModal()" class="btn btn-primary margin pull-right">Pago</a>
+		<a onclick="holdPayment()" class="btn btn-success margin pull-right">Postponer</a>
 	</div>
 </div>

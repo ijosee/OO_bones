@@ -122,8 +122,13 @@ class Invoice_model extends CI_Model {
 		if(isset($invoice_id)){
 			
 			$this->db->select('invoice.id as invoice_id
+				,invoice.created_time as created_time
+				,invoice.active as active
+				,invoice.on_hold as on_hold
+				,invoice.paid as paid
 				,customers.customer_id as customer_id
 				,customers.first_name as customer_name
+				,customers.observations as comment
 				,products.id as product_id
 				,products.name as product_name
 				,products.price_sale as product_price
@@ -148,8 +153,69 @@ class Invoice_model extends CI_Model {
 			
 		}else{
 			
-			return $this->db->get('invoice')->result();
+			$fields_datatable = array(
+				'draw'
+				,'start'
+				,'length' );
+
+			$error = false ;
+
+			foreach ($fields_datatable as $value) {
+
+				if(!isset($_POST[$value])){
+					$error = true ; 
+				}
+			}
 			
+			if($error) 
+				return 'error';
+
+			$this->db->join('customers c','invoice.customer_id = c.customer_id');
+
+			if($_POST['search']['value'] != ''){
+
+				$this->db->like('c.first_name',$_POST['search']['value']);
+				$this->db->or_like('c.last_name',$_POST['search']['value']);
+				
+				$this->db->order_by($_POST['order'][0]['column'], $_POST['order'][0]['dir']);
+				$result = $this->db->get('invoice',$_POST['length'],$_POST['start'])->result();
+
+			}else{
+
+				$this->db->order_by($_POST['order'][0]['column'], $_POST['order'][0]['dir']);
+				$result = $this->db->get('invoice',$_POST['length'],$_POST['start'])->result();
+
+			}
+
+			$newResult = array ();
+
+			foreach ($result as $row) {
+
+				$resultFormated = array (
+					$row->id
+					,$row->first_name
+					,$row->last_name
+					,$row->active
+					,$row->on_hold
+					,$row->paid
+					,$row->created_time
+					,$row->last_update
+					,$row->comment
+					,$row->pay_method
+				);
+
+				array_push($newResult, $resultFormated);
+			}
+
+			$modifiedArray = array(
+				'draw' => intval( $_POST['draw'] )
+				,'recordsTotal' => intval( $this->db->get('invoice')->num_rows() )
+				,'recordsFiltered' => intval( $this->db->get('invoice')->num_rows() )
+				,'data' => $newResult
+			);
+
+			return $modifiedArray ;
+
 		}
 		
 	}
@@ -158,40 +224,46 @@ class Invoice_model extends CI_Model {
 	
 	public function update () {
 		
-		$required_fields = array (
-				'id'
-				,'customer_id'
-				,'active'
-				,'on_hold'
-				,'paid'
-				,'last_update'
-				,'comment'
-		);
-		
-		$error = false;
-		$field_empty = '';
-		foreach($required_fields as $field){
-			if(isset($_POST[$field])){
-				$error= true;
-				$field_empty = $_POST[$field];
+		if(isset($_POST['invoice_id'])){
+			
+			if(isset($_POST['invoice_active'])
+				&& isset($_POST['invoice_on_hold'])
+				&& isset($_POST['invoice_paid'])){
+
+				if( strval($_POST['invoice_active']) == "true" ){
+					$_POST['invoice_active'] = 1;
+				}else{
+					$_POST['invoice_active'] = 0;
+				}
+
+				if( strval($_POST['invoice_on_hold']) == "true" ){
+					$_POST['invoice_on_hold'] = 1;
+				}else{
+					$_POST['invoice_on_hold'] = 0;
+
+				}
+
+				if( strval($_POST['invoice_paid']) == "true" ){
+					$_POST['invoice_paid'] = 1;
+				}else{
+					$_POST['invoice_paid'] = 0;
+				}
+
+				$data = array(
+				        'active' => $_POST['invoice_active']
+				        ,'on_hold' => $_POST['invoice_on_hold']
+				        ,'paid' => $_POST['invoice_paid']
+				);
+
+				$this->db->where ('id' , $_POST['invoice_id']) ;
+				$this->db->update('invoice',$data);
+
+			return $_POST['invoice_id'];
+
+			}else{
+
+				return 0 ;
 			}
-		}
-		
-		if(!$error){
-			$this->id    			= $_POST['id'];
-			$this->customer_id     	= $_POST['customer_id'];
-			$this->active    		= $_POST['active'];
-			$this->on_hold  		= $_POST['on_hold'];
-			$this->paid   			= $_POST['paid'];
-			$this->last_update  	= $_POST['last_update'];
-			$this->comment    		= $_POST['comment'];
-			
-			// eye , ¿must be an array?
-			$this->db->where ('customer_id' , $_POST['customer_id']) ;
-			$this->db->update('customers', $this);
-			
-			// return last id inserted
-			return $this->db->insert_id();
 			
 		}else{
 			

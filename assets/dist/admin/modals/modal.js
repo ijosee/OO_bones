@@ -1,5 +1,6 @@
 
 function showInfoModal(type,title,message){
+	event.preventDefault();
 
 	var modal = $('#modal_pos');
 
@@ -30,7 +31,7 @@ function showPaymentModal(){
 	    return showInfoModal('danger','Cliente','Selecciona un cliente para poder continuar.') ;
 
 	if(parseInt(invoice_id) === 0 ) 
-		return showInfoAlert('danger','No hay productos en la factura, añade uno para poder continuar') ;
+		return showInfoAlert('danger','No tienes productos en el ticket.') ;
 
 	$.ajax({
 	    
